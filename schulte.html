@@ -1,0 +1,97 @@
+<html xmlns=http://www.w3.org/1999/xhtml>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script>
+        function changeBtnText(val) {
+            document.getElementById('btn').value = '生成' + val + 'x' + val + '的表格';
+        }
+    </script>
+</head>
+<body>
+
+<div>
+    <input type="text" id="number" value='5' onKeyUp="changeBtnText(this.value);"/><input id="btn" type="button"
+                                                                                          value="生成5x5的表格"
+                                                                                          onclick="create_table(document.getElementById('number').value)"/>
+    <table id="main" border='1' align=center>
+
+    </table>
+</div>
+<div>
+    按下回车或空格计时开始/停止:
+    <div id='timer_dis'>
+    </div>
+</div>
+<script>
+    var t = 0
+    var tttt = false;
+    function showtime() {
+        t++;
+        document.getElementById("timer_dis").innerHTML = "<span style='color:#00FF00'>" + t + "</span>";
+    }
+    document.onkeydown = function (event) {
+        e = event ? event : (window.event ? window.event : null);
+        if (e.keyCode == 13 || e.keyCode == 32) {
+
+            if (tttt) {
+
+                clearTimeout(tttt);
+                document.getElementById("timer_dis").innerHTML = "<span style='color:#FF0000'>" + t + "</span>";
+                tttt = false;
+                t = 0;
+            } else {
+                tttt = setInterval('showtime()', 1000);
+
+            }
+
+        }
+    }
+    // 定义存放生成随机数的数组 
+    var array = new Array();
+    function create_table(num) {
+        array = new Array();
+        document.getElementById("main").innerHTML = "";
+
+// 循环N次生成随机数 
+        for (var i = 1; ; i++) {
+            // 只生成25个随机数 
+            if (array.length < num * num) {
+                generateRandom(num * num);
+            } else {
+                break;
+            }
+        }
+
+
+        var table1 = document.getElementById("main");
+        // 循环遍历随机数数组 
+
+        for (var i = 0; i < array.length; i++) {
+            if (i % num == 0)
+                var row = table1.insertRow(-1);
+            //for (var j=0;j<5 ; j++)
+            {
+                var cell = row.insertCell(-1);
+                cell.innerHTML = array[i];
+                cell.style = "width:20px;height:20px;font-size:18px;text-align:center";
+            }
+
+        }
+// 生成随机数的方法 
+        function generateRandom(count) {
+            var rand = parseInt(Math.random() * count) + 1;
+            for (var i = 0; i < array.length; i++) {
+                if (array[i] == rand) {
+                    return false;
+                }
+            }
+            array.push(rand);
+        }
+
+
+    }
+
+</script>
+</body>
+</html>
